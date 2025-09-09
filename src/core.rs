@@ -1,3 +1,5 @@
+use std::fmt::Display;
+
 #[derive(Copy, Clone, Debug, PartialEq, Eq)]
 pub struct Core {
     pub a: u16,
@@ -13,7 +15,7 @@ pub struct Core {
 }
 
 #[derive(Copy, Clone, Debug, PartialEq, Eq)]
-pub struct P(u8);
+pub struct P(pub u8);
 impl P {
     pub fn c(self) -> bool {
         self.0 & Self::C != 0
@@ -130,4 +132,18 @@ impl P {
     const M: u8 = 32;
     const V: u8 = 64;
     const N: u8 = 128;
+}
+impl Display for P {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let c = if self.c() { "C" } else { "-" };
+        let z = if self.c() { "Z" } else { "-" };
+        let i = if self.c() { "I" } else { "-" };
+        let d = if self.c() { "D" } else { "-" };
+        let x = if self.c() { "X" } else { "-" };
+        let m = if self.c() { "M" } else { "-" };
+        let v = if self.c() { "V" } else { "-" };
+        let n = if self.c() { "N" } else { "-" };
+
+        write!(f, "{n}{v}{m}{x}{d}{i}{z}{c}")
+    }
 }

@@ -3,6 +3,7 @@ use crate::core::Core;
 pub mod core;
 pub mod instruction;
 
+#[derive(Copy, Clone, Debug)]
 pub struct Bus {
     pub addr: u16,
     pub bank: u8,
@@ -10,6 +11,21 @@ pub struct Bus {
     flags: u8,
 }
 impl Bus {
+    pub fn new() -> Self {
+        Self {
+            addr: 0,
+            bank: 0,
+            data: 0,
+            flags: 0,
+        }
+    }
+
+    pub fn linear_address(self) -> u32 {
+        let high = (self.bank as u32) << 16;
+        let low = self.addr as u32;
+        low | high
+    }
+
     pub fn irq(self) -> bool {
         self.flags & Self::IRQ != 0
     }
@@ -84,6 +100,19 @@ impl Bus {
     const VPA: u8 = 64;
 }
 
+#[derive(Copy, Clone, Debug)]
 pub struct Cpu65816 {
     core: Core,
+}
+impl Cpu65816 {
+    pub fn new(core: Core) -> Self {
+        Self { core }
+    }
+
+    pub fn core(&self) -> Core {
+        self.core
+    }
+    pub fn cycle(&mut self, bus: &mut Bus) {
+        todo!()
+    }
 }
